@@ -1,0 +1,41 @@
+name: ghatgpt-monitor-3420
+services:
+  ghatgpt-monitor-3420:
+    build:
+      context: ./monitor
+      dockerfile: Dockerfile
+    container_name: ghatgpt-monitor-3420
+    restart: unless-stopped
+    pid: host
+    gpus: all
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      MONITOR_PORT: "3420"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/root:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+      - "3420:3420"
+    x-casaos:
+      ports:
+        - container: "3420"
+          description:
+            en_US: Monitoring panel
+x-casaos:
+  architectures:
+    - amd64
+  main: ghatgpt-monitor-3420
+  author: Сергей
+  category: Utilities
+  developer: Сергей
+  title:
+    en_US: GhatGPT Monitor 3420
+  tagline:
+    en_US: Server and GPU status panel
+  description:
+    en_US: Lightweight local status panel for CPU, memory, disk, Docker and NVIDIA GPU.
+  port_map: "3420"
+  index: /
