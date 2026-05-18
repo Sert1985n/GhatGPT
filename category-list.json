@@ -1,4 +1,12 @@
 [
-  {"id":"AI","name":{"en_US":"AI","ru_RU":"AI"}},
-  {"id":"Utilities","name":{"en_US":"Utilities","ru_RU":"Утилиты"}}
+  {
+    "name": "AI",
+    "font": "robot-outline",
+    "description": "AI Apps"
+  },
+  {
+    "name": "Utilities",
+    "font": "toolbox-outline",
+    "description": "Utilities Apps"
+  }
 ]
