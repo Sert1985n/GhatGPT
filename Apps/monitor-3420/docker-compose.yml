@@ -1,0 +1,72 @@
+name: monitor-3420
+services:
+  monitor-3420:
+    image: python:3.12-slim
+    container_name: monitor-3420
+    restart: unless-stopped
+    privileged: true
+    pid: host
+    ports:
+      - target: 3420
+        published: "3420"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: /proc
+        target: /host/proc
+        read_only: true
+      - type: bind
+        source: /sys
+        target: /host/sys
+        read_only: true
+    command:
+      - /bin/sh
+      - -lc
+      - |
+        cat >/tmp/monitor.py <<'PY'
+        from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
+        import subprocess, html
+        class H(BaseHTTPRequestHandler):
+            def do_GET(self):
+                cmds=['uptime','free -h','df -h /','nvidia-smi --query-gpu=name,temperature.gpu,utilization.gpu,memory.used,memory.total,power.draw --format=csv,noheader,nounits || true','docker ps --format "table {{.Names}}\\t{{.Status}}\\t{{.Ports}}" || true']
+                body='<html><head><meta charset="utf-8"><title>SERVER</title><meta http-equiv="refresh" content="3"></head><body style="background:#050505;color:#eee;font-family:monospace"><h1>SERVER</h1><pre>'
+                for c in cmds:
+                    body+='\n$ '+html.escape(c)+'\n'
+                    try: body+=html.escape(subprocess.check_output(c,shell=True,stderr=subprocess.STDOUT,timeout=6).decode(errors='ignore'))
+                    except Exception as e: body+=html.escape(str(e))
+                body+='</pre></body></html>'
+                data=body.encode(); self.send_response(200); self.send_header('Content-Type','text/html; charset=utf-8'); self.send_header('Content-Length',str(len(data))); self.end_headers(); self.wfile.write(data)
+            def log_message(self,*a): pass
+        ThreadingHTTPServer(('0.0.0.0',3420),H).serve_forever()
+        PY
+        python /tmp/monitor.py
+    x-casaos:
+      ports:
+        - container: "3420"
+          description:
+            en_US: Monitor panel
+            ru_RU: Панель мониторинга
+x-casaos:
+  architectures:
+    - amd64
+  main: monitor-3420
+  author: Сергей
+  category: Utilities
+  developer: GhatGPT
+  icon: https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/monitor-3420/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/monitor-3420/screenshot-1.png
+  title:
+    en_US: Server Monitor 3420
+    ru_RU: Server Monitor 3420
+  tagline:
+    en_US: Server and GPU monitor
+    ru_RU: Мониторинг сервера и GPU
+  description:
+    en_US: Server monitor panel on port 3420.
+    ru_RU: Панель мониторинга сервера на порту 3420.
+  port_map: "3420"
+  index: /

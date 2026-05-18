@@ -1,0 +1,53 @@
+name: ghatgpt
+services:
+  ghatgpt:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: ghatgpt
+    restart: unless-stopped
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - target: 8080
+        published: "3000"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /opt/ghatgpt/open-webui
+        target: /app/backend/data
+    environment:
+      WEBUI_NAME: GhatGPT
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      WEBUI_AUTH: "true"
+      ENABLE_SIGNUP: "true"
+    x-casaos:
+      ports:
+        - container: "8080"
+          description:
+            en_US: GhatGPT panel
+            ru_RU: Панель GhatGPT
+      volumes:
+        - container: /app/backend/data
+          description:
+            en_US: GhatGPT data
+            ru_RU: Данные GhatGPT
+x-casaos:
+  architectures:
+    - amd64
+  main: ghatgpt
+  author: Сергей
+  category: AI
+  developer: GhatGPT
+  icon: https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ghatgpt/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ghatgpt/screenshot-1.png
+  title:
+    en_US: GhatGPT
+    ru_RU: GhatGPT
+  tagline:
+    en_US: ChatGPT-like local AI panel
+    ru_RU: Локальная панель AI
+  description:
+    en_US: GhatGPT panel connected to Ollama on host port 11434.
+    ru_RU: Панель GhatGPT подключена к Ollama на порту 11434.
+  port_map: "3000"
+  index: /

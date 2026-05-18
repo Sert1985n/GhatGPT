@@ -1,0 +1,55 @@
+name: ollama-gpu
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    command: serve
+    gpus: all
+    ports:
+      - target: 11434
+        published: "11434"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /opt/ollama
+        target: /root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_KEEP_ALIVE: 2m
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+    x-casaos:
+      ports:
+        - container: "11434"
+          description:
+            en_US: Ollama API
+            ru_RU: Ollama API
+      volumes:
+        - container: /root/.ollama
+          description:
+            en_US: Models directory
+            ru_RU: Папка моделей
+x-casaos:
+  architectures:
+    - amd64
+  main: ollama
+  author: Сергей
+  category: AI
+  developer: Ollama
+  icon: https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ollama-gpu/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ollama-gpu/screenshot-1.png
+  title:
+    en_US: Ollama GPU
+    ru_RU: Ollama GPU
+  tagline:
+    en_US: Ollama with NVIDIA GPU
+    ru_RU: Ollama с NVIDIA GPU
+  description:
+    en_US: Ollama server with persistent /opt/ollama models.
+    ru_RU: Сервер Ollama с моделями в /opt/ollama.
+  port_map: "11434"
+  index: /

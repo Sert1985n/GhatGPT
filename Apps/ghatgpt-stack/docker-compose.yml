@@ -1,0 +1,74 @@
+name: ghatgpt-stack
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    command: serve
+    gpus: all
+    ports:
+      - target: 11434
+        published: "11434"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /opt/ollama
+        target: /root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_KEEP_ALIVE: 2m
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+  ghatgpt:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: ghatgpt
+    restart: unless-stopped
+    depends_on:
+      - ollama
+    ports:
+      - target: 8080
+        published: "3000"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /opt/ghatgpt/open-webui
+        target: /app/backend/data
+    environment:
+      WEBUI_NAME: GhatGPT
+      OLLAMA_BASE_URL: http://ollama:11434
+      WEBUI_AUTH: "true"
+      ENABLE_SIGNUP: "true"
+    x-casaos:
+      ports:
+        - container: "8080"
+          description:
+            en_US: GhatGPT panel
+            ru_RU: Панель GhatGPT
+      volumes:
+        - container: /app/backend/data
+          description:
+            en_US: GhatGPT data
+            ru_RU: Данные GhatGPT
+x-casaos:
+  architectures:
+    - amd64
+  main: ghatgpt
+  author: Сергей
+  category: AI
+  developer: GhatGPT
+  icon: https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ghatgpt-stack/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/ghatgpt-stack/screenshot-1.png
+  title:
+    en_US: GhatGPT Stack
+    ru_RU: GhatGPT Stack
+  tagline:
+    en_US: GhatGPT + Ollama GPU
+    ru_RU: GhatGPT + Ollama GPU
+  description:
+    en_US: GhatGPT panel with Ollama GPU backend.
+    ru_RU: Панель GhatGPT с Ollama GPU.
+  port_map: "3000"
+  index: /
