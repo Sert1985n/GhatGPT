@@ -1,0 +1,47 @@
+name: ollama
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    command: serve
+
+    gpus: all
+
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_KEEP_ALIVE: 2m
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+
+    volumes:
+      - /opt/ollama:/root/.ollama
+
+    ports:
+      - "127.0.0.1:11434:11434"
+
+    networks:
+      - open-webui-stack_default
+
+networks:
+  open-webui-stack_default:
+    external: true
+
+x-casaos:
+  architectures:
+    - amd64
+  main: ollama
+  author: Сергей
+  category: AI
+  description:
+    en_us: Ollama local model server
+  developer: Ollama
+  title:
+    en_us: Ollama
+  tagline:
+    en_us: Local AI model server
+  scheme: http
+  port_map: "11434"
