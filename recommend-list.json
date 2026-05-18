@@ -1,17 +1,17 @@
 [
   {
-    "appid": "ghatgpt-stack"
+    "appid": "GhatGPT-Stack"
   },
   {
-    "appid": "ollama-gpu"
+    "appid": "Ollama-GPU"
   },
   {
-    "appid": "ghatgpt"
+    "appid": "GhatGPT"
   },
   {
-    "appid": "monitor-3420"
+    "appid": "Monitor-3420"
   },
   {
-    "appid": "models-all"
+    "appid": "Models-All"
   }
 ]

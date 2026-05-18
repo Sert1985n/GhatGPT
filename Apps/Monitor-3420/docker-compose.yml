@@ -1,0 +1,46 @@
+name: monitor-3420
+services:
+  monitor-3420:
+    image: nicolargo/glances:latest-full
+    container_name: monitor-3420
+    restart: unless-stopped
+    network_mode: bridge
+    pid: host
+    ports:
+      - target: 61208
+        published: "3420"
+        protocol: tcp
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+      - type: bind
+        source: /etc/os-release
+        target: /etc/os-release
+        read_only: true
+    environment:
+      GLANCES_OPT: -w
+    x-casaos:
+      ports:
+        - container: "61208"
+          description:
+            en_us: Monitor WebUI
+            ru_ru: Панель мониторинга
+x-casaos:
+  architectures:
+    - amd64
+  main: monitor-3420
+  author: Сергей
+  category: Utilities
+  developer: GhatGPT
+  icon: https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/Monitor-3420/icon.png
+  screenshot_link:
+    - https://cdn.jsdelivr.net/gh/Sert1985n/GhatGPT@main/Apps/Monitor-3420/screenshot-1.png
+  title:
+    en_us: Server Monitor 3420
+  tagline:
+    en_us: Server monitor panel
+  description:
+    en_us: Server monitor panel on port 3420.
+  port_map: "3420"
+  index: /

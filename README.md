@@ -1,37 +1,25 @@
 # GhatGPT CasaOS AppStore
 
-Рабочий репозиторий CasaOS AppStore для установки локального AI-сервера:
+Рабочий CasaOS AppStore для локального AI-сервера.
 
-- `GhatGPT Stack` — GhatGPT + Ollama GPU.
-- `Ollama GPU` — отдельный сервер Ollama с NVIDIA GPU.
-- `GhatGPT` — панель на порту `3000`.
-- `Server Monitor 3420` — панель мониторинга на порту `3420`.
-- `Install All Models` — установка всех моделей.
-- Отдельные установщики моделей в `Apps/model-*`.
-
-## URL для CasaOS
-
-Добавлять в CasaOS как Custom App Store:
+## Добавить в CasaOS
 
 ```text
 https://github.com/Sert1985n/GhatGPT
 ```
 
-Если CasaOS просит ZIP:
+## Приложения
 
-```text
-https://github.com/Sert1985n/GhatGPT/archive/refs/heads/main.zip
-```
+- GhatGPT Stack — Ollama GPU + GhatGPT
+- Ollama GPU — только Ollama
+- GhatGPT — только панель
+- Server Monitor 3420 — мониторинг
+- Install All Models — установка моделей
 
 ## Порты
 
-- GhatGPT: `3000`
-- Ollama API: `11434`
-- Monitor: `3420`
+- GhatGPT: 3000
+- Ollama API: 11434
+- Monitor: 3420
 
-## Важно
-
-- Модели хранятся в `/opt/ollama`.
-- Эту папку не удалять.
-- Модельные приложения требуют, чтобы сначала был запущен `Ollama GPU` или `GhatGPT Stack`.
-- Все модели создают русские alias `ru-*`.
+Модели Ollama хранятся в `/opt/ollama`.
